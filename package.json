@@ -1,0 +1,25 @@
+{
+  "name": "string-catalog-translator",
+  "version": "1.0.0",
+  "description": "Translate app string catalogs on-device with Gemini Nano; the cloud only for what fails the checks. Firebase AI Logic hybrid inference.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc",
+    "licence-scan": "vite build --sourcemap --outDir .licence-scan --emptyOutDir && node scripts/licence-scan.cjs"
+  },
+  "author": "Sweekly Apps",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "firebase": "^13.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  },
+  "private": true,
+  "type": "module"
+}

@@ -1,0 +1,24 @@
+String Catalog Translator
+Copyright 2026 Sweekly Apps LLC
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Third-party components
+----------------------
+This repository contains no third-party source code. The components below are
+not owned by Sweekly Apps LLC. They are installed by npm from package.json and
+package-lock.json at build time, are not committed here, and remain under their
+own licences and copyright holders.
+
+Included in the built web app (run `npm run licence-scan` to re-check):
+  firebase 13.3.0 and its @firebase/* packages (ai, app, app-check, component,
+    installations, logger, remote-config, util)  Apache-2.0, Google LLC
+  idb 7.1.1                                       ISC, Jake Archibald
+
+Build and test tools only (not distributed): vite, typescript, vitest and
+their dependencies, under MIT, Apache-2.0, BSD-2/3-Clause, ISC, 0BSD and
+MPL-2.0 (lightningcss), as listed in package-lock.json.
+
+Services used at runtime under Google's terms: Firebase AI Logic, Firebase App
+Check, Firebase Remote Config, Gemini models (cloud) and Gemini Nano (Chrome's
+built-in AI).

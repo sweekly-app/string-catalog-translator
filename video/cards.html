@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{margin:0;font-family:system-ui,"Segoe UI",Roboto,sans-serif}
+.c{width:1920px;height:1080px;display:none;box-sizing:border-box;padding:120px 160px;background:#0f1420;color:#eef1f7;flex-direction:column;justify-content:center}
+.c.show{display:flex}
+h1{font-size:96px;margin:0 0 24px;letter-spacing:-.02em} h2{font-size:64px;margin:0 0 40px}
+p{font-size:40px;color:#aab3c5;margin:0 0 16px;line-height:1.35}
+.k{color:#fbbc04} .g{color:#81c995} .v{color:#c4a7ff} .r{color:#f28b82}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.row{display:flex;gap:28px;align-items:center;font-size:38px;margin:14px 0}
+.box{border:3px solid #3a4356;border-radius:22px;padding:22px 30px;background:#161c2b}
+.arrow{color:#5f6b82;font-size:48px}
+pre{font-size:30px;line-height:1.5;background:#161c2b;border-radius:20px;padding:30px 40px;color:#dfe5f0;margin:30px 0 0}
+.logo{width:120px;height:120px;margin-bottom:40px}
+</style></head><body>
+<div class="c" id="c1"><img class="logo" src="../public/icon.svg"><h1>String Catalog Translator</h1>
+<p class="mono">"Pay <span class="k">{amount}</span> now" → "Payer <span class="r">{montant}</span> maintenant"</p>
+<p>One translated placeholder, one broken checkout.</p></div>
+<div class="c" id="c2"><h2>On-device first. Cloud only for what fails.</h2>
+<div class="row"><div class="box g">Gemini Nano in Chrome</div><span class="arrow">→</span><div class="box">Check every string</div><span class="arrow">→</span><div class="box v">Gemini in the cloud<br><span style="font-size:28px;color:#aab3c5">only the failures</span></div></div>
+<p style="margin-top:40px">JSON · Flutter ARB · Android strings.xml · Apple .strings · .xcstrings</p></div>
+<div class="c" id="c3"><h2>Firebase AI Logic hybrid inference</h2>
+<pre>getGenerativeModel(ai, {
+  mode: <span class="k">"prefer_on_device"</span>,
+  onDeviceParams: { createOptions: {
+    expectedInputs:  [{ type: "text", languages: [<span class="g">"en"</span>] }],
+    expectedOutputs: [{ type: "text", languages: [<span class="g">"ja"</span>] }] } },
+  inCloudParams: { model: <span class="v">"gemini-3.5-flash-lite"</span> },
+});
+response.<span class="k">inferenceSource</span>  // "on_device" | "in_cloud"</pre></div>
+<div class="c" id="c4"><h2>Private mode</h2><div class="row"><div class="box g">mode: "only_on_device"</div></div>
+<p style="margin-top:30px">Nothing leaves the browser. What fails a check is flagged for a person.</p></div>
+<div class="c" id="c5"><img class="logo" src="../public/icon.svg"><h1>String Catalog Translator</h1>
+<p>On-device first, cloud only when it has to.</p><p>Open source (Apache-2.0) · Sweekly Apps</p></div>
+</body></html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Translate app string catalogs on-device with Gemini Nano, with the cloud only as a checked fallback. Built with Firebase AI Logic hybrid inference." />
+    <title>String Catalog Translator</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <img src="/icon.svg" alt="" width="32" height="32" />
+        <div>
+          <h1>String Catalog Translator</h1>
+          <p class="tag">On-device first. Cloud only for what fails the checks.</p>
+        </div>
+      </div>
+      <div id="engine-pill" class="pill">Checking Chrome's built-in AI…</div>
+    </header>
+
+    <div id="config-banner" class="banner" hidden>
+      Demo build without a Firebase project: Private mode only: translation runs in Chrome with Gemini Nano, and nothing is sent to the cloud.
+    </div>
+
+    <main>
+      <section class="card" aria-labelledby="in-h">
+        <h2 id="in-h"><span class="step">1</span> Strings</h2>
+        <div class="row">
+          <label class="file">
+            <input id="file" type="file" accept=".json,.arb,.xml,.strings,.xcstrings" />
+            Open file
+          </label>
+          <button id="sample" class="ghost" type="button">Load sample</button>
+          <span id="format" class="chip muted">JSON · ARB · strings.xml · .strings · .xcstrings</span>
+        </div>
+        <textarea id="input" spellcheck="false" aria-label="String catalog" placeholder='{ "checkout.pay": "Pay {amount}", "cart.items": "%d items in your cart" }'></textarea>
+        <p id="parse-msg" class="msg" role="status"></p>
+        <div class="grid2">
+          <label>Source language <select id="source"></select></label>
+          <label>Keep unchanged <input id="keep" type="text" placeholder="Brand names, e.g. Sweekly" /></label>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="t-h">
+        <h2 id="t-h"><span class="step">2</span> Languages and privacy</h2>
+        <div id="targets" class="chips" role="group" aria-label="Target languages"></div>
+        <fieldset class="modes">
+          <legend>Where strings may go</legend>
+          <label class="mode"><input type="radio" name="mode" value="hybrid" checked />
+            <span><b>Hybrid</b> Gemini Nano on this device; only strings that fail a check, or languages Nano lacks, go to Gemini in the cloud.</span></label>
+          <label class="mode"><input type="radio" name="mode" value="private" />
+            <span><b>Private</b> On-device only. Nothing leaves this browser; failures are flagged for you.</span></label>
+          <label class="mode"><input type="radio" name="mode" value="cloud" />
+            <span><b>Cloud</b> Gemini in the cloud for everything.</span></label>
+        </fieldset>
+        <div class="device">
+          <div id="device-grid" class="device-grid" aria-live="polite"></div>
+          <button id="prepare" class="ghost" type="button" hidden>Download Gemini Nano</button>
+          <progress id="dl" max="1" value="0" hidden></progress>
+        </div>
+      </section>
+
+      <section class="card wide" aria-labelledby="r-h">
+        <div class="row between">
+          <h2 id="r-h"><span class="step">3</span> Translate, check, export</h2>
+          <div class="row">
+            <button id="go" class="primary" type="button" disabled>Translate</button>
+            <button id="stop" class="ghost" type="button" hidden>Stop</button>
+          </div>
+        </div>
+        <progress id="progress" max="1" value="0" hidden></progress>
+        <div id="stats" class="stats" hidden></div>
+        <div class="row between" id="tools" hidden>
+          <label class="check"><input id="only-issues" type="checkbox" /> Only strings that need a look</label>
+          <div class="row" id="exports"></div>
+        </div>
+        <div class="table-wrap"><table id="results" hidden></table></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built by Sweekly Apps with Firebase AI Logic hybrid inference (Gemini Nano in Chrome, Gemini in the cloud). Source: Apache-2.0 licence. <a href="https://sweekly.app/company">sweekly.app</a></p>
+    </footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

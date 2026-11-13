@@ -1,0 +1,53 @@
+# Active only in the public repo (sweekly-app/string-catalog-translator), where this folder is the root.
+# Builds and publishes the demo to GitHub Pages on each push to main.
+name: Deploy demo
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Check the build variables are set
+        env:
+          VITE_FIREBASE_CONFIG: ${{ vars.VITE_FIREBASE_CONFIG }}
+          VITE_RECAPTCHA_SITE_KEY: ${{ vars.VITE_RECAPTCHA_SITE_KEY }}
+          VITE_APPCHECK_PROVIDER: ${{ vars.VITE_APPCHECK_PROVIDER }}
+        run: |
+          case "${VITE_APPCHECK_PROVIDER:-enterprise}" in enterprise|v3) ;; *) echo "::error::VITE_APPCHECK_PROVIDER must be enterprise or v3"; exit 1;; esac
+          [ -n "$VITE_FIREBASE_CONFIG" ] || { echo "::error::Repository variable VITE_FIREBASE_CONFIG is missing"; exit 1; }
+          [ -n "$VITE_RECAPTCHA_SITE_KEY" ] || { echo "::error::Repository variable VITE_RECAPTCHA_SITE_KEY is missing (App Check)"; exit 1; }
+          node -e 'const c=JSON.parse(process.env.VITE_FIREBASE_CONFIG); if(!c.apiKey||!c.projectId||!c.appId) process.exit(1)' || { echo "::error::VITE_FIREBASE_CONFIG is not the Firebase web config JSON"; exit 1; }
+      - run: npm ci
+      - run: npm test
+      - run: npm run build -- --base=/string-catalog-translator/
+        env:
+          # Set in the repo: Settings → Secrets and variables → Actions → Variables (not committed).
+          VITE_FIREBASE_CONFIG: ${{ vars.VITE_FIREBASE_CONFIG }}
+          VITE_RECAPTCHA_SITE_KEY: ${{ vars.VITE_RECAPTCHA_SITE_KEY }}
+          VITE_APPCHECK_PROVIDER: ${{ vars.VITE_APPCHECK_PROVIDER }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
