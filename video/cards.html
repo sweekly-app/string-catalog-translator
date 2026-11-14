@@ -12,23 +12,16 @@ p{font-size:40px;color:#aab3c5;margin:0 0 16px;line-height:1.35}
 pre{font-size:30px;line-height:1.5;background:#161c2b;border-radius:20px;padding:30px 40px;color:#dfe5f0;margin:30px 0 0}
 .logo{width:120px;height:120px;margin-bottom:40px}
 </style></head><body>
-<div class="c" id="c1"><img class="logo" src="../public/icon.svg"><h1>String Catalog Translator</h1>
-<p class="mono">"Pay <span class="k">{amount}</span> now" → "Payer <span class="r">{montant}</span> maintenant"</p>
-<p>One translated placeholder, one broken checkout.</p></div>
-<div class="c" id="c2"><h2>On-device first. Cloud only for what fails.</h2>
-<div class="row"><div class="box g">Gemini Nano in Chrome</div><span class="arrow">→</span><div class="box">Check every string</div><span class="arrow">→</span><div class="box v">Gemini in the cloud<br><span style="font-size:28px;color:#aab3c5">only the failures</span></div></div>
-<p style="margin-top:40px">JSON · Flutter ARB · Android strings.xml · Apple .strings · .xcstrings</p></div>
-<div class="c" id="c3"><h2>Firebase AI Logic hybrid inference</h2>
-<pre>getGenerativeModel(ai, {
-  mode: <span class="k">"prefer_on_device"</span>,
-  onDeviceParams: { createOptions: {
-    expectedInputs:  [{ type: "text", languages: [<span class="g">"en"</span>] }],
-    expectedOutputs: [{ type: "text", languages: [<span class="g">"ja"</span>] }] } },
-  inCloudParams: { model: <span class="v">"gemini-3.5-flash-lite"</span> },
-});
-response.<span class="k">inferenceSource</span>  // "on_device" | "in_cloud"</pre></div>
-<div class="c" id="c4"><h2>Private mode</h2><div class="row"><div class="box g">mode: "only_on_device"</div></div>
-<p style="margin-top:30px">Nothing leaves the browser. What fails a check is flagged for a person.</p></div>
-<div class="c" id="c5"><img class="logo" src="../public/icon.svg"><h1>String Catalog Translator</h1>
-<p>On-device first, cloud only when it has to.</p><p>Open source (Apache-2.0) · Sweekly Apps</p></div>
+<div class="c" id="c1"><h2>Localisation is where the roadmap leaks</h2>
+<div class="box" style="margin-bottom:28px"><p style="color:#eef1f7;margin:0 0 10px">2022 · a popular messaging app</p>
+<p style="margin:0">Its paid tier was spotted in strings on its public translation platform before launch.</p></div>
+<div class="box"><p style="color:#eef1f7;margin:0 0 10px">2024 · an industry privacy survey</p>
+<p style="margin:0">27 % of organisations had banned generative AI apps for the time being.</p></div>
+<p style="font-size:26px;color:#aab3c5;margin-top:24px">Sources are linked in the project description.</p></div>
+<div class="c" id="c2"><h2>How it works</h2>
+<div class="row"><div class="box g">Gemini Nano on this laptop</div><span class="arrow">&rarr;</span><div class="box">Check every string</div><span class="arrow">&rarr;</span><div class="box v">Cloud Gemini<br><span style="font-size:28px;color:#aab3c5">strings that fail a check, and languages Nano lacks</span></div></div>
+<p class="mono" style="margin-top:40px;color:#eef1f7">checkout strings may go out; <span class="k">feature.unreleased.*</span> never do</p>
+<p>Firebase AI Logic hybrid inference &middot; a receipt lists every string that left</p></div>
+<div class="c" id="c3"><img class="logo" src="../public/icon.svg"><h1>String Catalog Translator</h1>
+<p>Localise an unreleased app without sending its roadmap to the cloud.</p><p>Open source (Apache-2.0) &middot; Sweekly Apps</p></div>
 </body></html>

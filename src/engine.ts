@@ -29,7 +29,8 @@ export type Status =
   | "ok" // passed every check on the first route
   | "escalated" // on-device output failed a check (or the call failed); the cloud fixed it
   | "flagged" // has a translation that still fails a check: a human must look
-  | "failed"; // no usable translation
+  | "failed" // no usable translation
+  | "held"; // confidential key, no on-device model here: not translated and not sent anywhere
 
 export interface ItemResult {
   key: string;
@@ -40,6 +41,12 @@ export interface ItemResult {
   reason?: string;
   /** Non-blocking hint, e.g. likely UI overflow. */
   warning?: string;
+  /** The string was, or may have been, sent to the cloud (counted conservatively). */
+  left: boolean;
+  /** A confidential key: kept on the device whatever the mode. */
+  held?: boolean;
+  /** A person typed this translation. */
+  edited?: boolean;
 }
 
 export interface TranslateOptions {
@@ -55,9 +62,40 @@ export interface TranslateOptions {
   batchSize?: number;
   signal?: AbortSignal;
   onBatch?: (done: ItemResult[]) => void;
+  /** Key prefixes that must never be sent to the cloud (for example "feature.unreleased."). */
+  confidential?: string[];
+  /** Pause before retrying a busy cloud (injected in tests). */
+  sleep?: (ms: number) => Promise<void>;
 }
 
 const DEFAULT_BATCH = 12;
+const BUSY_RETRY_MS = 4000;
+
+export function isConfidential(key: string, prefixes: string[] = []): boolean {
+  return prefixes.some((p) => p.trim() !== "" && key.startsWith(p.trim()));
+}
+
+const QUOTA = /\b429\b|RESOURCE_EXHAUSTED|exhausted|quota/i;
+const UNAVAILABLE = /\b503\b|\bUNAVAILABLE\b|[Oo]verloaded/;
+const NO_NANO = /LanguageModel API not available|LanguageModel is not available|LanguageModel[^]*api-not-enabled/i;
+
+/** A plain reason for a failed model call: no URLs, no project ids, no SDK codes. */
+export function friendlyError(msg: string): string {
+  if (NO_NANO.test(msg)) return "Gemini Nano is not available in this browser";
+  if (QUOTA.test(msg)) return "cloud busy: the demo's free quota is used up for now; try again in a minute";
+  if (UNAVAILABLE.test(msg)) return "cloud temporarily unavailable; try again shortly";
+  const clean = msg
+    .slice(0, 2000)
+    .replace(/https?:\/\/\S+/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/ ?\(AI\/[\w-]+\)$/, "");
+  return clean.length > 160 ? clean.slice(0, 157) + "..." : clean;
+}
+
+function isBusy(msg: string): boolean {
+  return QUOTA.test(msg) || UNAVAILABLE.test(msg);
+}
 
 export function systemInstruction(source: string, target: string, keepTerms: string[]): string {
   const keep = keepTerms.length
@@ -125,14 +163,21 @@ interface Attempt {
   candidates: Record<string, string>; // key → text
   source?: Source;
   error?: string;
+  rawError?: string;
 }
 
-async function attempt(
-  batch: Entry[],
-  route: Route,
-  o: TranslateOptions,
-  system: string,
-): Promise<Attempt> {
+async function attempt(batch: Entry[], route: Route, o: TranslateOptions, system: string): Promise<Attempt> {
+  const first = await attemptOnce(batch, route, o, system);
+  // A busy cloud (quota or overload) gets one more try after a pause; the device route never does.
+  if (first.rawError && route !== "only_on_device" && isBusy(first.rawError)) {
+    await (o.sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms))))(BUSY_RETRY_MS);
+    if (o.signal?.aborted) throw new DOMException("Aborted", "AbortError");
+    return attemptOnce(batch, route, o, system);
+  }
+  return first;
+}
+
+async function attemptOnce(batch: Entry[], route: Route, o: TranslateOptions, system: string): Promise<Attempt> {
   try {
     const res = await o.generate({
       system,
@@ -151,13 +196,9 @@ async function attempt(
     return { candidates, source: res.source };
   } catch (e) {
     if (o.signal?.aborted) throw e;
-    return { candidates: {}, error: shortError(e) };
+    const raw = e instanceof Error ? e.message : String(e);
+    return { candidates: {}, error: friendlyError(raw), rawError: raw };
   }
-}
-
-function shortError(e: unknown): string {
-  const msg = e instanceof Error ? e.message : String(e);
-  return msg.length > 160 ? msg.slice(0, 157) + "..." : msg;
 }
 
 /**
@@ -169,9 +210,42 @@ function shortError(e: unknown): string {
  *    Cloud: failed items get one more cloud try.
  */
 export async function translateBatch(batch: Entry[], o: TranslateOptions): Promise<ItemResult[]> {
+  const conf = o.mode === "private" ? [] : batch.filter((e) => isConfidential(e.key, o.confidential));
+  if (conf.length) {
+    const open = batch.filter((e) => !isConfidential(e.key, o.confidential));
+    const byKey = new Map<string, ItemResult>();
+    if (open.length) for (const r of await translateBatch(open, { ...o, confidential: [] })) byKey.set(r.key, r);
+    if (o.deviceAvailable === true) {
+      // Confidential strings run exactly as in Private mode: on-device only, failures flagged.
+      for (const r of await translateBatch(conf, { ...o, mode: "private", confidential: [] })) byKey.set(r.key, { ...r, held: true });
+    } else {
+      for (const e of conf)
+        byKey.set(e.key, {
+          key: e.key,
+          status: "held",
+          left: false,
+          held: true,
+          reason: "confidential key: not sent to the cloud, and Gemini Nano is not available here",
+        });
+    }
+    return batch.map((e) => byKey.get(e.key)!);
+  }
+
   const keep = o.keepTerms ?? [];
-  const system = systemInstruction(o.sourceLanguage, o.targetLanguage, keep);
-  const first = await attempt(batch, firstRoute(o.mode), o, system);
+  // Only the terms this batch contains go into its prompt: a term typed in the field (an unreleased
+  // product name) never reaches the cloud unless a string being sent already carries it.
+  const system = systemInstruction(
+    o.sourceLanguage,
+    o.targetLanguage,
+    keep.filter((t) => t && batch.some((e) => e.text.includes(t))),
+  );
+  const route1 = firstRoute(o.mode);
+  const first = await attempt(batch, route1, o, system);
+  // Did the first call (possibly) reach the cloud? Unknown source after an error counts as sent,
+  // unless Chrome said Nano serves this pair (prefer_on_device then never falls back by itself).
+  const leftFirst =
+    route1 === "only_in_cloud" ||
+    (route1 === "prefer_on_device" && (first.source === "in_cloud" || (first.source === undefined && o.deviceAvailable !== true)));
 
   const results = new Map<string, ItemResult>();
   const retry: Entry[] = [];
@@ -180,7 +254,7 @@ export async function translateBatch(batch: Entry[], o: TranslateOptions): Promi
     const cand = first.candidates[e.key];
     const problem = first.error ? `call failed: ${first.error}` : validate(e, cand, keep);
     if (!problem) {
-      results.set(e.key, { key: e.key, text: cand, source: first.source, status: "ok" });
+      results.set(e.key, { key: e.key, text: cand, source: first.source, status: "ok", left: leftFirst });
     } else {
       retry.push(e);
       firstReason.set(e.key, problem);
@@ -202,6 +276,7 @@ export async function translateBatch(batch: Entry[], o: TranslateOptions): Promi
         const problem = second.error ? `call failed: ${second.error}` : validate(e, cand, keep);
         const before = firstReason.get(e.key) ?? "";
         const escalated = o.mode === "hybrid" && deviceTried && second.source === "in_cloud";
+        const left = leftFirst || retryRoute === "only_in_cloud";
         if (!problem) {
           results.set(e.key, {
             key: e.key,
@@ -209,6 +284,7 @@ export async function translateBatch(batch: Entry[], o: TranslateOptions): Promi
             source: second.source,
             status: escalated ? "escalated" : "ok",
             reason: escalated ? `first try ${first.source === "on_device" ? "on-device" : ""}: ${before}`.replace(" :", ":") : undefined,
+            left,
           });
         } else {
           // Keep the best text we have so a human can fix it rather than retype it.
@@ -220,6 +296,7 @@ export async function translateBatch(batch: Entry[], o: TranslateOptions): Promi
             source: text !== undefined ? source : undefined,
             status: text !== undefined && text.trim() !== "" ? "flagged" : "failed",
             reason: problem,
+            left,
           });
         }
       }
@@ -255,6 +332,7 @@ export interface Stats {
   escalated: number;
   flagged: number;
   failed: number;
+  held: number;
 }
 
 export function stats(results: ItemResult[]): Stats {
@@ -265,6 +343,7 @@ export function stats(results: ItemResult[]): Stats {
     escalated: results.filter((r) => r.status === "escalated").length,
     flagged: results.filter((r) => r.status === "flagged").length,
     failed: results.filter((r) => r.status === "failed").length,
+    held: results.filter((r) => r.held === true).length,
   };
 }
 
@@ -291,4 +370,43 @@ export const LANGUAGES = Object.keys(NAMES);
 
 export function languageName(code: string): string {
   return NAMES[code] ?? code;
+}
+
+export interface Receipt {
+  /** Translations attempted (strings × languages). */
+  total: number;
+  /** Never sent to the cloud. */
+  stayed: number;
+  /** Never sent, and translated by Gemini Nano on this device. */
+  onDevice: number;
+  left: { key: string; language: string; reason: string }[];
+  held: { key: string; language: string; state: "translated on-device" | "translated by hand" | "not translated" }[];
+}
+
+/** What left the device and why: the record a team can hand to a client. */
+export function receipt(byLanguage: Record<string, ItemResult[]>, mode: Mode = "hybrid"): Receipt {
+  const rc: Receipt = { total: 0, stayed: 0, onDevice: 0, left: [], held: [] };
+  for (const [language, rs] of Object.entries(byLanguage)) {
+    for (const r of rs) {
+      rc.total++;
+      const hasText = r.text !== undefined && r.text.trim() !== "";
+      if (r.held)
+        rc.held.push({ key: r.key, language, state: r.edited ? "translated by hand" : hasText ? "translated on-device" : "not translated" });
+      if (!r.left) {
+        rc.stayed++;
+        if (r.source === "on_device" && hasText && !r.edited) rc.onDevice++;
+        continue;
+      }
+      const reason =
+        r.status === "escalated" && r.reason
+          ? r.reason
+          : mode === "cloud"
+            ? "Cloud mode chosen"
+            : r.status === "failed" || r.status === "flagged"
+              ? `sent, then: ${r.reason ?? "failed"}`
+              : "this language pair has no on-device model here";
+      rc.left.push({ key: r.key, language, reason });
+    }
+  }
+  return rc;
 }

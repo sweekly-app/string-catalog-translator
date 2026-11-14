@@ -1,4 +1,5 @@
-// The demo catalog: realistic checkout strings with the placeholders that break apps.
+// The demo catalog: a client app's next release (synthetic): checkout strings with the placeholders that
+// break apps, plus three strings for an unannounced feature under feature.unreleased.
 export const SAMPLE = JSON.stringify(
   {
     app: { title: "Sweekly Shop", tagline: "Everything you need, delivered tomorrow." },
@@ -20,6 +21,15 @@ export const SAMPLE = JSON.stringify(
       orders: "You have %1$d open orders since %2$s",
       pro: "Upgrade to Sweekly Plus",
       logout: "Sign out",
+    },
+    feature: {
+      unreleased: {
+        split: {
+          title: "Split the bill with {name}",
+          body: "Each of you pays {share}. We remind {count} friends tomorrow.",
+          cta: "Request {amount} from {name}",
+        },
+      },
     },
   },
   null,

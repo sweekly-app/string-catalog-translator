@@ -75,7 +75,7 @@ describe("cloud error without Nano", () => {
       if (n === 1) throw new Error("quota exceeded");
       return fake({ on_device: device, in_cloud: cloud }, () => "in_cloud")(a);
     };
-    const r = await translateBatch(entries, { entries, sourceLanguage: "en", targetLanguage: "fr", mode: "hybrid", generate: g, deviceAvailable: false });
+    const r = await translateBatch(entries, { entries, sourceLanguage: "en", targetLanguage: "fr", mode: "hybrid", generate: g, deviceAvailable: false, sleep: async () => {} });
     expect(n).toBe(2);
     expect(r.every((x) => x.status === "ok" && x.source === "in_cloud")).toBe(true);
   });

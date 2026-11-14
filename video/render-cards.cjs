@@ -1,7 +1,7 @@
 // Renders cards.html to cards/0N-*.png at 1920x1080.
 const { chromium } = require('playwright');
 const path = require('path');
-const names = ['01-title', '02-idea', '03-how', '04-private', '05-end'];
+const names = ['01-why', '02-how', '03-end'];
 (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1920, height: 1080 } });
