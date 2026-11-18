@@ -136,6 +136,23 @@ describe("Android strings.xml", () => {
   });
 });
 
+describe("Android CDATA (a real open-source strings.xml writes it\\'s inside CDATA)", () => {
+  const xml = `<resources>
+    <string name="intro"><![CDATA[Whether it\\'s <b>On this day</b> or not.<br/>Line \\"two\\"\\nend]]></string>
+</resources>`;
+  it("applies Android's backslash escapes inside CDATA but leaves its markup as text", () => {
+    const [e] = parse(xml, "android").entries;
+    expect(e.text).toBe('Whether it\'s <b>On this day</b> or not.<br/>Line "two"\nend');
+    expect(e.markup).toBeUndefined();
+  });
+  it("round-trips with no stray backslash", () => {
+    const cat = parse(xml, "android");
+    const out = exportAndroid(cat, { intro: cat.entries[0].text });
+    expect(parse(out, "android").entries[0].text).toBe(cat.entries[0].text);
+    expect(out).not.toContain("\\\\");
+  });
+});
+
 describe("Apple .strings", () => {
   it("round-trips comments and escapes", () => {
     const src = '/* Title */\n"title" = "Say \\"hi\\"\\n";\n"b" = "B";\n';

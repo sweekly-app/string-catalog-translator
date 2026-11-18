@@ -191,8 +191,9 @@ function parseAndroid(input: string, sourceLanguage: string): Catalog {
 
 export function androidUnescape(raw: string): string {
   let s = raw;
+  // CDATA skips the XML layer only: aapt still applies Android's backslash escapes inside it (\' stays an apostrophe).
   const cdata = /^<!\[CDATA\[([\s\S]*)\]\]>$/.exec(s.trim());
-  if (cdata) return cdata[1];
+  if (cdata) return backslashUnescape(cdata[1]);
   if (s.length >= 2 && s.startsWith('"') && s.endsWith('"')) s = s.slice(1, -1);
   // XML entities first (the XML parser's layer), then Android's backslash escapes in one pass.
   s = s
@@ -202,6 +203,10 @@ export function androidUnescape(raw: string): string {
     .replace(/&apos;/g, "'")
     .replace(/&#(\d+);/g, (_, d: string) => String.fromCodePoint(Number(d)))
     .replace(/&amp;/g, "&");
+  return backslashUnescape(s);
+}
+
+function backslashUnescape(s: string): string {
   return s.replace(/\\(u[0-9a-fA-F]{4}|.)/g, (_, c: string) =>
     c.length === 5 ? String.fromCharCode(parseInt(c.slice(1), 16)) : c === "n" ? "\n" : c === "t" ? "\t" : c,
   );

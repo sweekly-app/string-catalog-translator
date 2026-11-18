@@ -240,10 +240,12 @@ function openRun(run: SavedRun, label: string) {
   const nano = run.onDeviceLanguages.length
     ? ` with Gemini Nano on that device for ${run.onDeviceLanguages.map(languageName).join(", ")}`
     : "";
-  replayBanner.textContent = `${label}, recorded ${date} in ${run.browser}${nano} (${run.mode} mode). Shown as recorded: nothing is translated again and nothing is sent.`;
+  replayBanner.textContent = `${label}, recorded ${date} in ${run.browser}${nano} (${run.mode} mode). Shown as recorded: nothing is translated again and nothing is sent. The language status above describes this browser, not the one that recorded the run.`;
   replayBanner.hidden = false;
   renderTable(catalog, langs);
   void refreshDevice();
+  // Like a finished live run, bring the banner and the receipt into view (the button sits far above them).
+  replayBanner.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 $("run-save").addEventListener("click", () => {

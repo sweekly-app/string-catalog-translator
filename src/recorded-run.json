@@ -1,0 +1,552 @@
+{
+  "kind": "string-catalog-translator/run",
+  "version": 1,
+  "created": "2026-11-18T04:58:39.602Z",
+  "browser": "Chrome/157.0.0.0",
+  "mode": "hybrid",
+  "sourceLanguage": "en",
+  "confidential": [
+    "feature.unreleased."
+  ],
+  "keepTerms": [
+    "Sweekly",
+    "Sweekly Plus"
+  ],
+  "fileName": "sample.json",
+  "catalogText": "{\n  \"app\": {\n    \"title\": \"Sweekly Shop\",\n    \"tagline\": \"Everything you need, delivered tomorrow.\"\n  },\n  \"cart\": {\n    \"items\": \"%d items in your cart\",\n    \"empty\": \"Your cart is empty.\",\n    \"remove\": \"Remove\",\n    \"subtotal\": \"Subtotal: {amount}\"\n  },\n  \"checkout\": {\n    \"pay\": \"Pay {amount} now\",\n    \"shipping\": \"Ships to {city} in {days} days\",\n    \"promo\": \"Use code <b>{code}</b> to save {percent}%\",\n    \"terms\": \"By paying you accept our <a href=\\\"/terms\\\">terms</a>.\",\n    \"error\": \"Payment failed. Try again or use another card.\"\n  },\n  \"account\": {\n    \"greeting\": \"Welcome back, {{name}}!\",\n    \"orders\": \"You have %1$d open orders since %2$s\",\n    \"pro\": \"Upgrade to Sweekly Plus\",\n    \"logout\": \"Sign out\"\n  },\n  \"feature\": {\n    \"unreleased\": {\n      \"split\": {\n        \"title\": \"Split the bill with {name}\",\n        \"body\": \"Each of you pays {share}. We remind {count} friends tomorrow.\",\n        \"cta\": \"Request {amount} from {name}\"\n      }\n    }\n  }\n}",
+  "onDeviceLanguages": [
+    "es",
+    "ja",
+    "fr",
+    "de"
+  ],
+  "results": {
+    "es": {
+      "app.title": {
+        "key": "app.title",
+        "text": "Sweekly Shop",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "app.tagline": {
+        "key": "app.tagline",
+        "text": "Todo lo que necesitas, entregado mañana.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.items": {
+        "key": "cart.items",
+        "text": "%d artículos en tu carrito",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.empty": {
+        "key": "cart.empty",
+        "text": "Tu carrito está vacío.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.remove": {
+        "key": "cart.remove",
+        "text": "Eliminar",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.subtotal": {
+        "key": "cart.subtotal",
+        "text": "Subtotal: {amount}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.pay": {
+        "key": "checkout.pay",
+        "text": "Paga {amount} ahora",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.shipping": {
+        "key": "checkout.shipping",
+        "text": "Se envía a {city} en {days} días",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.promo": {
+        "key": "checkout.promo",
+        "text": "Usa el código <b>{code}</b> para ahorrar {percent}%",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.terms": {
+        "key": "checkout.terms",
+        "text": "Al pagar, aceptas nuestros <a href=\"/terms\">términos</a>.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.error": {
+        "key": "checkout.error",
+        "text": "Pago fallido. Intenta de nuevo o usa otra tarjeta.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.greeting": {
+        "key": "account.greeting",
+        "text": "¡Bienvenido de vuelta, {{name}}!",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.orders": {
+        "key": "account.orders",
+        "text": "¿Tienes %1$d pedidos pendientes desde %2$s?",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.pro": {
+        "key": "account.pro",
+        "text": "Actualiza a Sweekly Plus",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.logout": {
+        "key": "account.logout",
+        "text": "Cerrar sesión",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "feature.unreleased.split.title": {
+        "key": "feature.unreleased.split.title",
+        "text": "Divide la cuenta con {name}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      },
+      "feature.unreleased.split.body": {
+        "key": "feature.unreleased.split.body",
+        "text": "Cada uno paga {share}. Recordaremos a {count} amigos mañana.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      },
+      "feature.unreleased.split.cta": {
+        "key": "feature.unreleased.split.cta",
+        "text": "Solicita {amount} a {name}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      }
+    },
+    "ja": {
+      "app.title": {
+        "key": "app.title",
+        "text": "Sweekly Shop",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "app.tagline": {
+        "key": "app.tagline",
+        "text": "必要なものがすべて、明日お届け。",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.items": {
+        "key": "cart.items",
+        "text": "%d点の商品がカートに入っています。",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.empty": {
+        "key": "cart.empty",
+        "text": "カートは空です。",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.remove": {
+        "key": "cart.remove",
+        "text": "削除",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.subtotal": {
+        "key": "cart.subtotal",
+        "text": "小計：{amount}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.pay": {
+        "key": "checkout.pay",
+        "text": "{amount}を今すぐお支払いください",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.shipping": {
+        "key": "checkout.shipping",
+        "text": "{city}へ{days}日以内に発送します",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.promo": {
+        "key": "checkout.promo",
+        "text": "コード<b>{code}</b>で{percent}%お得に利用できます。",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.terms": {
+        "key": "checkout.terms",
+        "text": "請求には、当社の <a href=\"/terms\">利用規約</a> に同意するものとします。",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.error": {
+        "key": "checkout.error",
+        "text": "お支払いに失敗しました。再度お試しいただくか、別のカードをご利用ください。",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.greeting": {
+        "key": "account.greeting",
+        "text": "ようこそ、{{name}}さん！",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.orders": {
+        "key": "account.orders",
+        "text": "現在、%1$d件の注文が保留中です (%2$sより)",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.pro": {
+        "key": "account.pro",
+        "text": "Sweekly Plusへアップグレード",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.logout": {
+        "key": "account.logout",
+        "text": "サインアウト",
+        "source": "in_cloud",
+        "status": "escalated",
+        "reason": "first try on-device: missing from the model's reply",
+        "left": true
+      },
+      "feature.unreleased.split.title": {
+        "key": "feature.unreleased.split.title",
+        "text": "分割をしましょう、{name}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      },
+      "feature.unreleased.split.body": {
+        "key": "feature.unreleased.split.body",
+        "text": "皆で分担します。{share}、明日、{count}人にリマインドします。",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      },
+      "feature.unreleased.split.cta": {
+        "key": "feature.unreleased.split.cta",
+        "text": "{name}に{amount}を要求する",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      }
+    },
+    "fr": {
+      "app.title": {
+        "key": "app.title",
+        "text": "Sweekly Shop",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "app.tagline": {
+        "key": "app.tagline",
+        "text": "Tout ce dont vous avez besoin, livré demain.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.items": {
+        "key": "cart.items",
+        "text": "%d articles dans votre panier",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.empty": {
+        "key": "cart.empty",
+        "text": "Votre panier est vide.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.remove": {
+        "key": "cart.remove",
+        "text": "Supprimer",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.subtotal": {
+        "key": "cart.subtotal",
+        "text": "Sous-total : {amount}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.pay": {
+        "key": "checkout.pay",
+        "text": "Payez {amount} maintenant",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.shipping": {
+        "key": "checkout.shipping",
+        "text": "Expédié à {city} en {days} jours",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.promo": {
+        "key": "checkout.promo",
+        "text": "Utilisez le code <b>{code}</b> pour économiser {percent}%",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.terms": {
+        "key": "checkout.terms",
+        "text": "En paiant, vous acceptez nos <a href=\"/terms\">conditions</a>.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.error": {
+        "key": "checkout.error",
+        "text": "Paiement refusé. Veuillez réessayer ou utiliser une autre carte.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.greeting": {
+        "key": "account.greeting",
+        "text": "Bienvenue, {{name}} !",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.orders": {
+        "key": "account.orders",
+        "text": "Vous avez %1$d commandes ouvertes depuis %2$s",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.pro": {
+        "key": "account.pro",
+        "text": "Upgrade vers Sweekly Plus",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.logout": {
+        "key": "account.logout",
+        "text": "Déconnexion",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "feature.unreleased.split.title": {
+        "key": "feature.unreleased.split.title",
+        "text": "Diviser l'addition avec {name}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      },
+      "feature.unreleased.split.body": {
+        "key": "feature.unreleased.split.body",
+        "text": "Chacun de vous paie {share}. Nous avertissons {count} amis demain.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      },
+      "feature.unreleased.split.cta": {
+        "key": "feature.unreleased.split.cta",
+        "text": "Demander {amount} à {name}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      }
+    },
+    "de": {
+      "app.title": {
+        "key": "app.title",
+        "text": "Sweekly Shop",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "app.tagline": {
+        "key": "app.tagline",
+        "text": "Alles, was Sie brauchen, wird morgen geliefert.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.items": {
+        "key": "cart.items",
+        "text": "%d Artikel in Ihrem Warenkorb",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.empty": {
+        "key": "cart.empty",
+        "text": "Ihr Warenkorb ist leer.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.remove": {
+        "key": "cart.remove",
+        "text": "Entfernen",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "cart.subtotal": {
+        "key": "cart.subtotal",
+        "text": "Subtotal: {amount}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.pay": {
+        "key": "checkout.pay",
+        "text": "Bezahlen Sie jetzt {amount}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.shipping": {
+        "key": "checkout.shipping",
+        "text": "Versand nach {city} in {days} Tagen",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.promo": {
+        "key": "checkout.promo",
+        "text": "Geben Sie den Code <b>{code}</b> ein, um {percent}% zu sparen.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.terms": {
+        "key": "checkout.terms",
+        "text": "Mit der Zahlung stimmen Sie unseren <a href=\"/terms\">Richtlinien</a> zu.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "checkout.error": {
+        "key": "checkout.error",
+        "text": "Die Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut oder verwenden Sie eine andere Karte.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "warning": "95 chars vs 46 in the source: may overflow its UI element"
+      },
+      "account.greeting": {
+        "key": "account.greeting",
+        "text": "Willkommen zurück, {{name}}!",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.orders": {
+        "key": "account.orders",
+        "text": "Sie haben seit %2$s %1$d offene Bestellungen.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.pro": {
+        "key": "account.pro",
+        "text": "Zum Upgrade auf Sweekly Plus",
+        "source": "on_device",
+        "status": "ok",
+        "left": false
+      },
+      "account.logout": {
+        "key": "account.logout",
+        "text": "Abmelden",
+        "source": "in_cloud",
+        "status": "escalated",
+        "reason": "first try on-device: missing from the model's reply",
+        "left": true
+      },
+      "feature.unreleased.split.title": {
+        "key": "feature.unreleased.split.title",
+        "text": "Teile die Rechnung mit {name}",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      },
+      "feature.unreleased.split.body": {
+        "key": "feature.unreleased.split.body",
+        "text": "Jeder bezahlt {share}. Wir erinnern {count} Freunden morgen.",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      },
+      "feature.unreleased.split.cta": {
+        "key": "feature.unreleased.split.cta",
+        "text": "Bitte {amount} von {name} anfordern",
+        "source": "on_device",
+        "status": "ok",
+        "left": false,
+        "held": true
+      }
+    }
+  }
+}
