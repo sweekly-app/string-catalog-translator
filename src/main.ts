@@ -139,7 +139,9 @@ function keepTerms(): string[] {
 
 function clearResults() {
   results = {};
+  const wasReplay = !replayBanner.hidden;
   replayBanner.hidden = true;
+  if (wasReplay) void refreshDevice(); // the language status describes this browser again
   table.hidden = true;
   table.replaceChildren();
   tools.hidden = true;
@@ -234,13 +236,15 @@ function openRun(run: SavedRun, label: string) {
   results = run.results;
   openedRun = run;
   runMode = run.mode;
+  const modeInput = document.querySelector<HTMLInputElement>(`input[name="mode"][value="${run.mode}"]`);
+  if (modeInput && !modeInput.disabled) modeInput.checked = true;
   runConfidential = run.confidential;
   runKeepTerms = run.keepTerms;
   const date = run.created.slice(0, 10);
   const nano = run.onDeviceLanguages.length
     ? ` with Gemini Nano on that device for ${run.onDeviceLanguages.map(languageName).join(", ")}`
     : "";
-  replayBanner.textContent = `${label}, recorded ${date} in ${run.browser}${nano} (${run.mode} mode). Shown as recorded: nothing is translated again and nothing is sent. The language status above describes this browser, not the one that recorded the run.`;
+  replayBanner.textContent = `${label}, recorded ${date} in ${run.browser}${nano} (${run.mode} mode). Shown as recorded: nothing is translated again and nothing is sent.`;
   replayBanner.hidden = false;
   renderTable(catalog, langs);
   void refreshDevice();
@@ -325,6 +329,7 @@ async function refreshDevice() {
   let anyDownloadable = false;
   let anyAvailable = false;
   let noApi = false;
+  const shown = !replayBanner.hidden ? openedRun : null;
   for (const t of ts) {
     const a = await deviceAvailability(src, t);
     availability.set(t, a);
@@ -332,12 +337,16 @@ async function refreshDevice() {
     if (a === "available") anyAvailable = true;
     if (a === "no-api") noApi = true;
     const cell = document.createElement("div");
-    cell.className = `dev ${a === "available" ? "on" : a === "downloadable" || a === "downloading" ? "dl" : "off"}`;
+    const recordedOn = shown ? shown.onDeviceLanguages.includes(t) : false;
+    cell.className = `dev ${(shown ? recordedOn : a === "available") ? "on" : !shown && (a === "downloadable" || a === "downloading") ? "dl" : "off"}`;
     const name = document.createElement("b");
     name.textContent = languageName(t);
     const state = document.createElement("span");
-    state.textContent =
-      a === "available"
+    state.textContent = shown
+      ? recordedOn
+        ? "Recorded run: Gemini Nano on that device"
+        : "Recorded run: no Gemini Nano for this language there"
+      : a === "available"
         ? "Gemini Nano on this device"
         : a === "downloadable"
           ? "Nano can be downloaded"
@@ -350,7 +359,9 @@ async function refreshDevice() {
     deviceGrid.append(cell);
   }
   prepareBtn.hidden = !anyDownloadable;
-  enginePill.textContent = noApi
+  enginePill.textContent = shown
+    ? `Showing a run recorded in ${shown.browser}${shown.onDeviceLanguages.length ? " with Gemini Nano" : ""}`
+    : noApi
     ? "No Gemini Nano in this browser: Hybrid uses the cloud, confidential keys are held back"
     : anyAvailable
       ? "Gemini Nano ready in this browser"
@@ -372,7 +383,7 @@ async function refreshDevice() {
     }
   }
   lastMode = mode();
-  enginePill.className = `pill ${anyAvailable ? "on" : noApi ? "off" : "dl"}`;
+  enginePill.className = `pill ${(shown ? shown.onDeviceLanguages.length > 0 : anyAvailable) ? "on" : noApi || shown ? "off" : "dl"}`;
 }
 
 prepareBtn.addEventListener("click", async () => {
@@ -403,7 +414,9 @@ goBtn.addEventListener("click", async () => {
   runConfidential = confidential();
   runKeepTerms = keepTerms();
   openedRun = null;
+  const wasReplay = !replayBanner.hidden;
   replayBanner.hidden = true;
+  if (wasReplay) await refreshDevice(); // a live run: the status describes this browser again (audit N-6)
   running = new AbortController();
   updateGo();
   stopBtn.hidden = false;
@@ -537,7 +550,7 @@ function resultCell(key: string, sourceText: string, lang: string, r: ItemResult
   if (r.held) {
     const b = document.createElement("span");
     b.className = "badge b-held";
-    b.textContent = "Held back";
+    b.textContent = "Never sent";
     meta.append(b);
     if (r.status === "held") text.placeholder = "Confidential: translate here by hand";
   }
@@ -573,12 +586,17 @@ function renderStats() {
   const pct = (n: number) => `${Math.round((n / s.total) * 100)} %`;
   const stayedOnDevice = allResults().filter((r) => r.source === "on_device" && !r.left && !r.edited && (r.text ?? "").trim() !== "").length;
   const held = allResults().filter((r) => r.status === "held").length;
+  const warned = allResults().filter((r) => r.warning && (r.status === "ok" || r.status === "escalated")).length;
   const tiles: [string, string, string][] = [
     // Same rule as the receipt: from the device and never sent (audit M-1r).
     [pct(stayedOnDevice), "translated on this device", stayedOnDevice ? "on" : "none"],
     [String(allResults().filter((r) => r.left).length), "sent to the cloud", "cloud"],
     [String(s.escalated), "fixed by cloud after a failed check", "esc"],
-    [String(s.flagged + s.failed + held), "need a human look", s.flagged + s.failed + held ? "bad" : "ok"],
+    [
+      String(s.flagged + s.failed + held),
+      `need a human look${warned ? ` (+ ${warned} may overflow)` : ""}`,
+      s.flagged + s.failed + held ? "bad" : warned ? "warn" : "ok",
+    ],
   ];
   statsBox.replaceChildren(
     ...tiles.map(([v, l, c]) => {
@@ -612,12 +630,14 @@ function renderReceipt(cat: Catalog) {
   }
   receiptBox.hidden = false;
   // "Did not run" only when no result came from the device at all (audit L-6).
-  const noNano = !allResults().some((r) => r.source === "on_device") && runMode !== "cloud" && rc.left.length > 0;
+  const noNano = !allResults().some((r) => r.source === "on_device") && runMode !== "cloud";
   receiptBox.classList.toggle("neutral", noNano || runMode === "cloud");
   const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? "" : "s"}`;
   const replaying = !replayBanner.hidden;
   const here = replaying ? "the recording browser" : "this browser";
-  $("rc-head").textContent = noNano
+  $("rc-head").textContent = noNano && rc.left.length === 0
+    ? `Gemini Nano did not run ${replaying ? "in that run" : "here"}: nothing was translated on the device and nothing was sent to the cloud`
+    : noNano
     ? `Gemini Nano did not run ${replaying ? "in that run" : "here"}: ${rc.left.length} of ${plural(rc.total, "translation")} sent to the cloud, ${rc.held.length} confidential kept on the device (${rc.held.filter((h) => h.state === "not translated").length} still untranslated)`
     : `${rc.stayed} of ${plural(rc.total, "translation")} never left ${here} (${rc.onDevice} translated on-device, ${rc.held.length} confidential kept on the device) · ${rc.left.length} sent to the cloud`;
   const conf = runConfidential;

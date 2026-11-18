@@ -16,6 +16,8 @@ So an agency or contract developer localising a client's next release under an N
 
 Agencies, contract developers and small app teams who ship Flutter, Android, iOS or web apps and translate strings before a launch. String Catalog Translator does the bulk of the work on the developer's own machine, sends the cloud only the strings that fail a check (or languages Nano can't serve there), never sends keys marked confidential, and gives a receipt to hand to the client: how many translations never left the laptop, which strings did, and why. It never exports a string that fails a check: it flags it in the table for a person instead.
 
+Tested on a real catalog, not only the sample: the English `strings.xml` of the open-source Wikipedia Android app (2,261 strings, 72 of them in CDATA; Apache License 2.0). Importing and exporting it found a bug: inside CDATA, Android's `\'` escape reached the model, and the exported file would have shown `it\'s` in the app. It is fixed with a test, and the whole file now goes in and out with no string changed. Used for testing only; Wikimedia is not affiliated with and does not endorse this project.
+
 ## What it does
 
 1. **Paste or open a string catalog**: JSON (flat or nested), Flutter ARB, Android `strings.xml`, Apple `.strings` or Apple String Catalog (`.xcstrings`). The format is detected; notes and descriptions are kept and sent as context.
@@ -99,4 +101,4 @@ npm run build
 
 Apache-2.0 © 2026 Sweekly Apps LLC (`LICENSE`). Built with AI coding assistance. Third-party open-source components are listed in `NOTICE` under their own licences; all other rights in the submission, to the extent they exist, are held by Sweekly Apps LLC. Data and media sources: `PROVENANCE.md`. Licence check: `npm run licence-scan`.
 
-Firebase, Gemini and Chrome are trademarks of Google LLC. Telegram is a trademark of its owner. Used for identification only.
+Firebase, Gemini and Chrome are trademarks of Google LLC. Telegram is a trademark of its owner. Wikipedia is a trademark of the Wikimedia Foundation. Used for identification only.

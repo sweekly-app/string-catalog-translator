@@ -73,6 +73,7 @@ progress { width: 100%; height: 6px; accent-color: var(--blue); }
 .stat.esc { background: var(--blue-soft); color: var(--blue); }
 .stat.bad { background: var(--red-soft); color: var(--red); }
 .stat.ok { background: var(--green-soft); color: var(--green); }
+.stat.warn { background: var(--amber-soft); color: var(--amber); }
 .check { flex-direction: row; align-items: center; gap: 6px; color: var(--ink); }
 .table-wrap { overflow-x: auto; margin-top: 12px; }
 table { border-collapse: collapse; width: 100%; font-size: 13px; }

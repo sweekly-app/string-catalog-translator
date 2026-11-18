@@ -21,6 +21,8 @@ A release's string file is its roadmap. String Catalog Translator lets a develop
 ### Who it's for
 Agencies, contract developers and small app teams who translate a client's or their own next release before launch, often under an NDA. Today they send everything to a vendor or a cloud tool and hope, or translate by hand and fix broken placeholders.
 
+Tested on a real catalog, not only the sample: the English `strings.xml` of the open-source Wikipedia Android app (2,261 strings, 72 of them in CDATA; Apache License 2.0). Importing and exporting it found a bug: inside CDATA, Android's `\'` escape reached the model, and the exported file would have shown `it\'s` in the app. It is fixed with a test, and the whole file now goes in and out with no string changed. Used for testing only; Wikimedia is not affiliated with and does not endorse this project.
+
 ### Inspiration
 Localisation is where a release's roadmap leaks: Telegram Premium was seen before launch in strings on its own translation platform, cited as "further proof of his earlier leak pointing to the imminent launch of Telegram Premium" ([Notebookcheck, 28 May 2022](https://www.notebookcheck.net/Telegram-More-evidence-of-a-new-Premium-tier-allegedly-comes-to-light-thanks-to-new-website-code.622988.0.html)). Buyers react by keeping AI away from confidential text: 27 % of organisations in Cisco's 2024 privacy benchmark "had banned GenAI applications altogether for the time being" ([Cisco, 25 Jan 2024](https://newsroom.cisco.com/c/r/newsroom/en/us/a/y2024/m01/organizations-ban-use-of-generative-ai-over-data-privacy-security-cisco-study.html)), and one UK translation agency's policy says its translators "should not use AI translation tools for our clients’ work unless we have specifically asked them to do so" ([Atlas Translations, 25 Aug 2026](https://www.atlas-translations.co.uk/blog/ai-legislation-in-translation/)). Translation is where pre-launch strings leave the building. Hybrid inference fits this job exactly: a small on-device model can translate UI strings in place, per-string checks decide which few are worth sending to a bigger cloud model, and the team decides which may never go.
 
@@ -61,7 +63,7 @@ The useful question is not "on-device or cloud" but "which string, and who decid
 ### What's next
 Translation memory stored on the device, a glossary per project, and a signed receipt a client can verify.
 
-Firebase, Gemini and Chrome are trademarks of Google LLC. Telegram is a trademark of its owner. Used for identification only.
+Firebase, Gemini and Chrome are trademarks of Google LLC. Telegram is a trademark of its owner. Wikipedia is a trademark of the Wikimedia Foundation. Used for identification only.
 
 ## Built with
 firebase, firebase-ai-logic, firebase-app-check, firebase-remote-config, gemini-nano, gemini, chrome-built-in-ai, prompt-api, typescript, vite, vitest, github-pages
@@ -92,4 +94,4 @@ Required by rules §6: what was built during the submission period, any pre-exis
 
 **Third-party tools:** Firebase AI Logic, App Check and Remote Config are used under the Firebase terms on a Firebase project owned by Sweekly Apps; Gemini Nano is used through Chrome's built-in AI under Chrome's terms.
 
-**Third-party content:** the sample strings were written for this demo; the app and the video use no third-party trademarks, logos or copyrighted material. The written description cites three public sources by name, with short quotes and links, for context only; none of them is affiliated with or endorses this project.
+**Third-party content:** the sample strings were written for this demo; the app and the video use no third-party trademarks, logos or copyrighted material. The written description cites three public sources by name, with short quotes and links, for context only, and names the open-source Wikipedia Android app (Apache License 2.0) whose English strings file was used to test the importer; none of them is affiliated with or endorses this project.
