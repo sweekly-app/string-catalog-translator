@@ -1,7 +1,7 @@
-// Records footage/export.webm: the app replaying the bundled recorded run (src/recorded-run.json), exporting
+// Records footage/replay-export.webm: the app replaying the bundled recorded run (src/recorded-run.json), exporting
 // Android strings.xml, then a listing of the zip it produced. Nothing is translated or sent: it is a replay.
 // Usage: npm run build; npx vite preview --port 4173 --strictPort &; node video/capture-export.cjs [url]
-// Then compose.sh labels the whole clip "Replay of a recorded run" (cuts.txt row 6).
+// Then compose.sh labels the whole clip "Replay of a recorded run" (cuts.txt row 5).
 const { chromium } = require("playwright");
 const { execFileSync } = require("child_process");
 const fs = require("fs");
@@ -54,8 +54,8 @@ const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, 
   const end = (Date.now() - t0) / 1000;
   const video = p.video();
   await ctx.close();
-  const out = path.join(dir, "export.webm");
+  const out = path.join(dir, "replay-export.webm");
   fs.renameSync(await video.path(), out);
   await b.close();
-  console.log(`footage/export.webm: use ${start.toFixed(1)} to ${end.toFixed(1)} s; zip ${list.length} files`);
+  console.log(`footage/replay-export.webm: use ${start.toFixed(1)} to ${end.toFixed(1)} s; zip ${list.length} files`);
 })();

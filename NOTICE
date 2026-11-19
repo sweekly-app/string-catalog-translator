@@ -19,6 +19,18 @@ Build and test tools only (not distributed): vite, typescript, vitest and
 their dependencies, under MIT, Apache-2.0, BSD-2/3-Clause, ISC, 0BSD and
 MPL-2.0 (lightningcss), as listed in package-lock.json.
 
+Test input shown in the video and in two stills
+-----------------------------------------------
+third_party/wikipedia-android/strings-excerpt.xml is an unmodified excerpt of
+the strings file of the open-source Wikipedia Android app
+(https://github.com/wikimedia/apps-android-wikipedia,
+app/src/main/res/values/strings.xml at commit
+b39e649981a97d8e24eb938f04ccc3d20aa3b456), Apache License 2.0
+(third_party/wikipedia-android/LICENSE; the project has no NOTICE file). It is
+the test input shown in the demo video and in video/stills/01-receipt.png and
+video/stills/03-languages-privacy.png. It is not covered by the "all other
+rights" line. Wikimedia is not affiliated with and does not endorse this project.
+
 Services used at runtime under Google's terms: Firebase AI Logic, Firebase App
 Check, Firebase Remote Config, Gemini models (cloud) and Gemini Nano (Chrome's
 built-in AI).

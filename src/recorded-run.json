@@ -1,7 +1,7 @@
 {
   "kind": "string-catalog-translator/run",
   "version": 1,
-  "created": "2026-11-18T04:58:39.602Z",
+  "created": "2026-11-18T09:40:29.683Z",
   "browser": "Chrome/157.0.0.0",
   "mode": "hybrid",
   "sourceLanguage": "en",
@@ -73,7 +73,7 @@
       },
       "checkout.shipping": {
         "key": "checkout.shipping",
-        "text": "Se envía a {city} en {days} días",
+        "text": "Enviado a {city} en {days} días",
         "source": "on_device",
         "status": "ok",
         "left": false
@@ -101,14 +101,14 @@
       },
       "account.greeting": {
         "key": "account.greeting",
-        "text": "¡Bienvenido de vuelta, {{name}}!",
+        "text": "¡Bienvenido de nuevo, {{name}}!",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "account.orders": {
         "key": "account.orders",
-        "text": "¿Tienes %1$d pedidos pendientes desde %2$s?",
+        "text": "Tienes %1$d pedidos abiertos desde %2$s",
         "source": "on_device",
         "status": "ok",
         "left": false
@@ -162,14 +162,14 @@
       },
       "app.tagline": {
         "key": "app.tagline",
-        "text": "必要なものがすべて、明日お届け。",
+        "text": "明日、必要なものがすべて届きます。",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "cart.items": {
         "key": "cart.items",
-        "text": "%d点の商品がカートに入っています。",
+        "text": "%d 個のアイテムがカートに入っています。",
         "source": "on_device",
         "status": "ok",
         "left": false
@@ -197,28 +197,28 @@
       },
       "checkout.pay": {
         "key": "checkout.pay",
-        "text": "{amount}を今すぐお支払いください",
+        "text": "{amount} を今すぐお支払いください。",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "checkout.shipping": {
         "key": "checkout.shipping",
-        "text": "{city}へ{days}日以内に発送します",
+        "text": "{city} まで {days} 日で配送されます。",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "checkout.promo": {
         "key": "checkout.promo",
-        "text": "コード<b>{code}</b>で{percent}%お得に利用できます。",
+        "text": "コード <b>{code}</b> を使用して {percent}% お得に。",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "checkout.terms": {
         "key": "checkout.terms",
-        "text": "請求には、当社の <a href=\"/terms\">利用規約</a> に同意するものとします。",
+        "text": "お支払いすることにより、当社の <a href=\"/terms\">利用規約</a> に同意するものとします。",
         "source": "on_device",
         "status": "ok",
         "left": false
@@ -232,17 +232,18 @@
       },
       "account.greeting": {
         "key": "account.greeting",
-        "text": "ようこそ、{{name}}さん！",
+        "text": "ようこそ、{{name}}様！",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "account.orders": {
         "key": "account.orders",
-        "text": "現在、%1$d件の注文が保留中です (%2$sより)",
-        "source": "on_device",
-        "status": "ok",
-        "left": false
+        "text": "%2$s以降、未完了の注文が%1$d件あります",
+        "source": "in_cloud",
+        "status": "escalated",
+        "reason": "first try on-device: placeholder check failed: lost %1$d %2$s, added %1$s %2$d",
+        "left": true
       },
       "account.pro": {
         "key": "account.pro",
@@ -261,7 +262,7 @@
       },
       "feature.unreleased.split.title": {
         "key": "feature.unreleased.split.title",
-        "text": "分割をしましょう、{name}",
+        "text": "{name}と割分ける",
         "source": "on_device",
         "status": "ok",
         "left": false,
@@ -269,7 +270,7 @@
       },
       "feature.unreleased.split.body": {
         "key": "feature.unreleased.split.body",
-        "text": "皆で分担します。{share}、明日、{count}人にリマインドします。",
+        "text": "それぞれが{share}を支払います。明日、{count}人にお知らせします。",
         "source": "on_device",
         "status": "ok",
         "left": false,
@@ -277,7 +278,7 @@
       },
       "feature.unreleased.split.cta": {
         "key": "feature.unreleased.split.cta",
-        "text": "{name}に{amount}を要求する",
+        "text": "{name}に{amount}を請求する",
         "source": "on_device",
         "status": "ok",
         "left": false,
@@ -336,7 +337,7 @@
       },
       "checkout.shipping": {
         "key": "checkout.shipping",
-        "text": "Expédié à {city} en {days} jours",
+        "text": "Expédié à {city} sous {days} jours",
         "source": "on_device",
         "status": "ok",
         "left": false
@@ -357,42 +358,42 @@
       },
       "checkout.error": {
         "key": "checkout.error",
-        "text": "Paiement refusé. Veuillez réessayer ou utiliser une autre carte.",
+        "text": "Paiement échoué. Réessayez ou utilisez une autre carte.",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "account.greeting": {
         "key": "account.greeting",
-        "text": "Bienvenue, {{name}} !",
+        "text": "Bienvenue de retour, {{name}}!",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "account.orders": {
         "key": "account.orders",
-        "text": "Vous avez %1$d commandes ouvertes depuis %2$s",
+        "text": "Vous avez %1$d commande(s) ouverte(s) depuis %2$s",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "account.pro": {
         "key": "account.pro",
-        "text": "Upgrade vers Sweekly Plus",
+        "text": "Passer à Sweekly Plus",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "account.logout": {
         "key": "account.logout",
-        "text": "Déconnexion",
+        "text": "Se déconnecter",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "feature.unreleased.split.title": {
         "key": "feature.unreleased.split.title",
-        "text": "Diviser l'addition avec {name}",
+        "text": "Divisez l'addition avec {name}",
         "source": "on_device",
         "status": "ok",
         "left": false,
@@ -400,7 +401,7 @@
       },
       "feature.unreleased.split.body": {
         "key": "feature.unreleased.split.body",
-        "text": "Chacun de vous paie {share}. Nous avertissons {count} amis demain.",
+        "text": "Chacun paie {share}. Nous avertissons {count} amis demain.",
         "source": "on_device",
         "status": "ok",
         "left": false,
@@ -408,7 +409,7 @@
       },
       "feature.unreleased.split.cta": {
         "key": "feature.unreleased.split.cta",
-        "text": "Demander {amount} à {name}",
+        "text": "Demandez {amount} à {name}",
         "source": "on_device",
         "status": "ok",
         "left": false,
@@ -474,25 +475,25 @@
       },
       "checkout.promo": {
         "key": "checkout.promo",
-        "text": "Geben Sie den Code <b>{code}</b> ein, um {percent}% zu sparen.",
+        "text": "Bitte verwenden Sie den Code <b>{code}</b> für {percent}% Rabatt.",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "checkout.terms": {
         "key": "checkout.terms",
-        "text": "Mit der Zahlung stimmen Sie unseren <a href=\"/terms\">Richtlinien</a> zu.",
+        "text": "Durch die Zahlung stimmen Sie unseren <a href=\"/terms\">Geschäftsbedingungen</a> zu.",
         "source": "on_device",
         "status": "ok",
         "left": false
       },
       "checkout.error": {
         "key": "checkout.error",
-        "text": "Die Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut oder verwenden Sie eine andere Karte.",
+        "text": "Die Zahlung fehlgeschlagen. Bitte erneut versuchen oder eine andere Karte verwenden.",
         "source": "on_device",
         "status": "ok",
         "left": false,
-        "warning": "95 chars vs 46 in the source: may overflow its UI element"
+        "warning": "84 chars vs 46 in the source: may overflow its UI element"
       },
       "account.greeting": {
         "key": "account.greeting",
@@ -510,7 +511,7 @@
       },
       "account.pro": {
         "key": "account.pro",
-        "text": "Zum Upgrade auf Sweekly Plus",
+        "text": "Abonniere Sweekly Plus",
         "source": "on_device",
         "status": "ok",
         "left": false
@@ -518,14 +519,13 @@
       "account.logout": {
         "key": "account.logout",
         "text": "Abmelden",
-        "source": "in_cloud",
-        "status": "escalated",
-        "reason": "first try on-device: missing from the model's reply",
-        "left": true
+        "source": "on_device",
+        "status": "ok",
+        "left": false
       },
       "feature.unreleased.split.title": {
         "key": "feature.unreleased.split.title",
-        "text": "Teile die Rechnung mit {name}",
+        "text": "Die Rechnung teilen mit {name}",
         "source": "on_device",
         "status": "ok",
         "left": false,
@@ -533,7 +533,7 @@
       },
       "feature.unreleased.split.body": {
         "key": "feature.unreleased.split.body",
-        "text": "Jeder bezahlt {share}. Wir erinnern {count} Freunden morgen.",
+        "text": "Jeder zahlt {share}. Wir erinnern {count} Freunden morgen.",
         "source": "on_device",
         "status": "ok",
         "left": false,
@@ -541,7 +541,7 @@
       },
       "feature.unreleased.split.cta": {
         "key": "feature.unreleased.split.cta",
-        "text": "Bitte {amount} von {name} anfordern",
+        "text": "Überweise {amount} an {name}",
         "source": "on_device",
         "status": "ok",
         "left": false,

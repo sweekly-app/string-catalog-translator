@@ -16,6 +16,7 @@ import {
 } from "firebase/ai";
 import type { Generate, Route } from "./engine";
 import { DEFAULT_POLICY, readPolicy, REMOTE_DEFAULTS, type Policy } from "./policy";
+import { hasDeviceModelApi, refuseIfNoDeviceModel } from "./guard";
 
 /** Per model call. Gemini Nano and the cloud answer a 12-string batch in seconds. */
 export const CALL_TIMEOUT_MS = 45_000;
@@ -105,6 +106,7 @@ export class HybridTranslator {
       if (route === "only_in_cloud") throw new Error("cloud fallback is paused");
       route = "only_on_device";
     }
+    refuseIfNoDeviceModel(route, hasDeviceModelApi());
     const model = this.model(route, a.sourceLanguage, a.targetLanguage);
     // The system text goes in the prompt so the on-device and cloud paths see the same input.
     // A call that hangs (for example App Check waiting on a reCAPTCHA script a blocker stopped:
