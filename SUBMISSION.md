@@ -44,7 +44,7 @@ Summary tiles show what share ran on the device, what went to the cloud, what th
 - Vite and TypeScript, Firebase JS SDK 13.3 with **Firebase AI Logic** (Gemini Nano in Chrome on-device): `getAI` with the Gemini Developer API backend and `getGenerativeModel` in `prefer_on_device`, `only_on_device` and `only_in_cloud` modes, with `gemini-3.5-flash-lite` as the cloud model.
 - One model per language pair. `onDeviceParams.createOptions` declares the expected input and output languages, so Chrome's `LanguageModel.availability()` answers per pair and the SDK sends unsupported pairs to the cloud by itself.
 - `response.inferenceSource` labels every string, and `initializeDeviceModel()` downloads Gemini Nano from a button, with a progress bar.
-- The routing engine is pure TypeScript with the model call injected, so the hybrid rules (keep, escalate, flag) are covered by unit tests without a browser. There are 83 tests across formats, placeholders (ICU plural and select included), routing, confidential keys, the receipt, busy-cloud retries, saved runs, the zip export, the video text and the Remote Config policy.
+- The routing engine is pure TypeScript with the model call injected, so the hybrid rules (keep, escalate, flag) are covered by unit tests without a browser. There are 93 tests across formats, placeholders (ICU plural and select included), routing, confidential keys, the receipt, busy-cloud retries, saved runs, the zip export, the video text and the Remote Config policy.
 - **App Check** (reCAPTCHA Enterprise or v3, chosen at build time; debug tokens for local development) protects the cloud calls; enforcement is on for the demo project, so only the demo site can spend its Gemini quota. Each cloud call that meets a busy cloud (429 or 503) is retried once, then explained in plain words; on-device results are unaffected.
 - **Remote Config** serves the cloud model name, the batch size and a switch that pauses the cloud fallback (the app then runs in Private mode), all without a redeploy. Values are validated, and defaults live in code.
 - No server: a static site on GitHub Pages, built by GitHub Actions; the Firebase config comes from repository variables, not the source.
@@ -64,6 +64,9 @@ The useful question is not "on-device or cloud" but "which string, and who decid
 Translation memory stored on the device, a glossary per project, and a signed receipt a client can verify.
 
 Firebase, Gemini and Chrome are trademarks of Google LLC. Telegram is a trademark of its owner. Wikipedia is a trademark of the Wikimedia Foundation. Used for identification only.
+
+## Main technology requirement
+The app's translation runs entirely through **Firebase AI Logic hybrid inference** (`src/ai.ts`). Each language pair gets its own `getGenerativeModel` with `mode: prefer_on_device`, so Gemini Nano in Chrome translates on the device first, and the SDK sends pairs Nano can't serve to cloud Gemini by itself. Every on-device answer is then checked (placeholders, tags, ICU plural and select); in Hybrid mode only a string that fails a check is sent again with `only_in_cloud`, and keys marked confidential are never sent (`src/engine.ts`). `response.inferenceSource` labels every result "On-device" or "Cloud", and the receipt lists each string that left the browser with its reason. App Check protects the cloud calls, and Remote Config serves the cloud model and a switch that pauses the cloud fallback.
 
 ## Built with
 firebase, firebase-ai-logic, firebase-app-check, firebase-remote-config, gemini-nano, gemini, chrome-built-in-ai, prompt-api, typescript, vite, vitest, github-pages

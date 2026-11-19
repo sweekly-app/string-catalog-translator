@@ -73,7 +73,7 @@ npm run dev
 - Without a config the app runs in Private mode only: Gemini Nano in Chrome, no network calls to a model.
 - On-device needs desktop Chrome with built-in AI (Gemini Nano); see [Chrome's hardware requirements](https://developer.chrome.com/docs/ai/get-started).
 
-Tests (83 unit tests: formats, placeholders and ICU, routing, confidential keys, receipt, saved runs, zip export, video text, Remote Config policy) and the production build (typecheck, then `dist/`):
+Tests (93 unit tests: formats, placeholders and ICU, routing, confidential keys, receipt, saved runs, zip export, video text, Remote Config policy) and the production build (typecheck, then `dist/`):
 
 ```
 npm test
